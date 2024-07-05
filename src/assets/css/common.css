@@ -7,3 +7,16 @@
 body {
     font-size: 14px;
 }
+
+/* 
+    隐藏底部导航栏 
+    后续只需在需要隐藏的页面标签内加上 top-page即可
+*/
+.top-page {
+    position: relative;
+    z-index: 9;
+    height: 100vh;
+    background-color: #fff;
+  
+    overflow-y: auto;
+}
