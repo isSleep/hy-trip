@@ -6,6 +6,9 @@
     </div>
     <home-search-box />
     <home-categories />
+    <div class="search-bar" v-if="isShowSearchBar">
+      <search-bar :start-date="'09.19'" :end-date="'09.20'"/>
+    </div>
     <home-content />
   </div>
 </template>
@@ -17,6 +20,7 @@ import HomeNavBar from './cpns/home-nav-bar.vue'
 import HomeSearchBox from './cpns/home-search-box.vue'
 import HomeCategories from './cpns/home-categories.vue'
 import HomeContent from './cpns/home-content.vue'
+import SearchBar from '@/components/search-bar/search-bar.vue'
 
 import useScroll from '@/hooks/useScroll'
 import { computed } from '@vue/reactivity';
@@ -38,6 +42,11 @@ watch(isReachBottom, (newValue) => {
     })
   }
 })
+
+// 定义的可响应式数据, 依赖另外一个可响应式的数据, 那么可以使用计算函数(computed)
+const isShowSearchBar = computed(() => {
+  return scrollTop.value >= 360
+})
 </script>
 
 <style lang="less" scoped>
@@ -48,5 +57,16 @@ watch(isReachBottom, (newValue) => {
   img {
     width: 100%;
   }
+}
+
+.search-bar {
+  position: fixed;
+  z-index: 9;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 45px;
+  padding: 16px 16px 10px;
+  background-color: #fff;
 }
 </style>
