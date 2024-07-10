@@ -37,7 +37,7 @@ export default function useScroll() {
     clientHeight.value = document.documentElement.clientHeight
     scrollTop.value = document.documentElement.scrollTop
     scrollHeight.value = document.documentElement.scrollHeight
-    if (clientHeight.value + scrollTop.value >= scrollHeight.value) {
+    if (clientHeight.value + scrollTop.value >= scrollHeight.value - 1) {     
       console.log("滚动到底部了")
       isReachBottom.value = true
     }

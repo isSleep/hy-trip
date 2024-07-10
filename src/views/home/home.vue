@@ -10,6 +10,7 @@
       <search-bar :start-date="'09.19'" :end-date="'09.20'"/>
     </div>
     <home-content />
+    <!-- <loading /> -->
   </div>
 </template>
 
@@ -21,7 +22,7 @@ import HomeSearchBox from './cpns/home-search-box.vue'
 import HomeCategories from './cpns/home-categories.vue'
 import HomeContent from './cpns/home-content.vue'
 import SearchBar from '@/components/search-bar/search-bar.vue'
-
+import Loading from '@/components/loading/loading.vue'
 import useScroll from '@/hooks/useScroll'
 import { computed } from '@vue/reactivity';
 
