@@ -8,7 +8,8 @@
     />
   </div>
   <div class="main" v-if="mainPart">
-    <detail_01-swipe :swipe-data="mainPart.topModule.housePicture.housePics"/>
+    <detail-swipe :swipe-data="mainPart.topModule.housePicture.housePics"/>
+    <detail-infos :top-infos="mainPart.topModule" />
   </div>
 </template>
 
@@ -16,7 +17,8 @@
 import { ref, computed } from 'vue'
 import { useRoute,useRouter } from 'vue-router';
 import { getDetailInfos } from '@/services'
-import detail_01Swipe from './cpns/detail_01-swipe.vue';
+import DetailSwipe from "./cpns/detail_01-swipe.vue"
+import DetailInfos from "./cpns/detail_02-infos.vue"
 const router = useRouter()
 const route = useRoute()
 const houseId = route.params.id
