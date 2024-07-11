@@ -14,6 +14,9 @@
                     <template v-for="(value, key, index) in swipeGroup" :key="key">
                         <span class="item" :class="{ active: swipeData[active]?.enumPictureCategory == key }">
                             <span class="text">{{ getName(value[0].title) }}</span>
+                            <span class="count" v-if="swipeData[active]?.enumPictureCategory == key">
+                                {{ getCategoryIndex(swipeData[active]) }}/{{ value.length }}
+                            </span>
                         </span>
                     </template>
                 </div>
@@ -59,6 +62,12 @@ const getName = (name) => {
     // return name.replace(":","").replace("【","").replace("】","")
     const results = nameReg.exec(name)
     return results[1]
+}
+
+// 获取轮播图下表的序号
+const getCategoryIndex = (item) => {
+  const valueArray = swipeGroup[item.enumPictureCategory]
+  return valueArray.findIndex(data => data === item) + 1
 }
 </script>
 
