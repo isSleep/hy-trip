@@ -7,13 +7,16 @@
       @click-left="onClickLeft"
     />
   </div>
+  <div class="main" v-if="mainPart">
+    <detail_01-swipe :swipe-data="mainPart.topModule.housePicture.housePics"/>
+  </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
 import { useRoute,useRouter } from 'vue-router';
 import { getDetailInfos } from '@/services'
-
+import detail_01Swipe from './cpns/detail_01-swipe.vue';
 const router = useRouter()
 const route = useRoute()
 const houseId = route.params.id
