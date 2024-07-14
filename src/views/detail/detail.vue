@@ -1,6 +1,16 @@
 <template>
-  <div class="detail">
-    <van-nav-bar title="房屋详情" left-text="旅途" left-arrow @click-left="onClickLeft" />
+  <div class="detail top-page" ref="detailRef">
+    <tab-control
+      v-if="showTabControl"
+      class="tabs"
+      :titles="['aaa','222','333']"
+    />
+    <van-nav-bar 
+      title="房屋详情" 
+      left-text="旅途" 
+      left-arrow 
+      @click-left="onClickLeft" 
+    />
 
     <div class="main" v-if="mainPart">
       <detail-swipe :swipe-data="mainPart.topModule.housePicture.housePics" />
@@ -23,6 +33,8 @@
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
 import { getDetailInfos } from '@/services'
+
+import TabControl from "@/components/tab-control/tab-control.vue"
 import DetailSwipe from "./cpns/detail_01-swipe.vue"
 import DetailInfos from "./cpns/detail_02-infos.vue"
 import DetailFacility from "./cpns/detail_03-facility.vue"
@@ -31,6 +43,7 @@ import DetailComment from "./cpns/detail_05-comment.vue"
 import DetailNotice from "./cpns/detail_06-notice.vue"
 // import DetailMap from "./cpns/detail_07-map.vue"
 import DetailIntro from "./cpns/detail_08-intro.vue"
+import useScroll from '@/hooks/useScroll'
 
 const router = useRouter()
 const route = useRoute()
@@ -48,10 +61,22 @@ const onClickLeft = () => {
   router.back()
 }
 
-
+// tabControl相关的操作
+const detailRef = ref()
+const { scrollTop } = useScroll(detailRef)
+const showTabControl = computed(() => {
+  return scrollTop.value >= 300
+})
 </script>
 
 <style lang="less" scoped>
+.tabs {
+  position: fixed;
+  z-index: 9;
+  left: 0;
+  right: 0;
+  top: 0;
+}
 .footer {
   display: flex;
   flex-direction: column;
