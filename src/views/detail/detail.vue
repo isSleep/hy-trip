@@ -1,9 +1,39 @@
+<!-- 
+  1. 给tab-control绑定属性和点击方法
+      :titles="names"
+      @tabItemClick="tabClick"
+  2. 给其他组件绑定属性name和动态绑定ref(绑定一个函数)
+    :ref="getSectionRef" name="描述"
+  3. 定义属性和方法
+    const sectionEls = ref({})
+    const names = computed(() => {
+      return Object.keys(sectionEls.value)
+    })
+    const getSectionRef = (value) => {
+      const name = value.$el.getAttribute("name")
+      sectionEls.value[name] = value.$el
+    }
+    const tabClick = (index) => {
+      const key = Object.keys(sectionEls.value)[index]
+      const el = sectionEls.value[key]
+      let instance = el.offsetTop
+      if (index !== 0) {
+        instance = instance - 44
+      }
+
+      detailRef.value.scrollTo({
+        top: instance,
+        behavior: "smooth"
+      })
+    }
+-->
 <template>
   <div class="detail top-page" ref="detailRef">
     <tab-control
       v-if="showTabControl"
       class="tabs"
-      :titles="['aaa','222','333']"
+      :titles="names"
+      @tabItemClick="tabClick"
     />
     <van-nav-bar 
       title="房屋详情" 
@@ -12,14 +42,15 @@
       @click-left="onClickLeft" 
     />
 
-    <div class="main" v-if="mainPart">
+    <!-- 绑定v-memo="[mainPart]"实现只监听某个属性的变化 -->
+    <div class="main" v-if="mainPart" v-memo="[mainPart]">
       <detail-swipe :swipe-data="mainPart.topModule.housePicture.housePics" />
-      <detail-infos :top-infos="mainPart.topModule" />
-      <detail-facility name="设施" :house-facility="mainPart.dynamicModule.facilityModule.houseFacility" />
-      <detail-landlord name="房东" :landlord="mainPart.dynamicModule.landlordModule" />
-      <detail-comment name="评论" :comment="mainPart.dynamicModule.commentModule" />
-      <detail-notice name="须知" :order-rules="mainPart.dynamicModule.rulesModule.orderRules" />
-      <detail-map name="周边" :position="mainPart.dynamicModule.positionModule" />
+      <detail-infos :ref="getSectionRef" name="描述" :top-infos="mainPart.topModule" />
+      <detail-facility :ref="getSectionRef" name="设施" :house-facility="mainPart.dynamicModule.facilityModule.houseFacility" />
+      <detail-landlord  :ref="getSectionRef" name="房东" :landlord="mainPart.dynamicModule.landlordModule" />
+      <detail-comment :ref="getSectionRef" name="评论" :comment="mainPart.dynamicModule.commentModule" />
+      <detail-notice :ref="getSectionRef" name="须知" :order-rules="mainPart.dynamicModule.rulesModule.orderRules" />
+      <detail-map :ref="getSectionRef" name="周边" :position="mainPart.dynamicModule.positionModule" />
       <detail-intro :price-intro="mainPart.introductionModule" />
     </div>
     <div class="footer">
@@ -67,6 +98,35 @@ const { scrollTop } = useScroll(detailRef)
 const showTabControl = computed(() => {
   return scrollTop.value >= 300
 })
+
+//实现点击对应顶部导航栏跳转到相应高度位置
+// const landlordRef = ref()
+// const sectionEls = []
+// const getSectionRef = (value) => {
+//   sectionEls.push(value.$el)
+// }
+const sectionEls = ref({})
+const names = computed(() => {
+  return Object.keys(sectionEls.value)
+})
+const getSectionRef = (value) => {
+  // .$el获取根元素
+  const name = value.$el.getAttribute("name")
+  sectionEls.value[name] = value.$el
+}
+const tabClick = (index) => {
+  const key = Object.keys(sectionEls.value)[index]
+  const el = sectionEls.value[key]
+  let instance = el.offsetTop
+  if (index !== 0) {
+    instance = instance - 44
+  }
+
+  detailRef.value.scrollTo({
+    top: instance,
+    behavior: "smooth"
+  })
+}
 </script>
 
 <style lang="less" scoped>
