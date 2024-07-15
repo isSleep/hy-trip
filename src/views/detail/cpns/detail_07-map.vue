@@ -17,6 +17,8 @@ const props = defineProps({
     }
 })
 
+const mapRef = ref()
+
 onMounted(() => {
     const map = new BMapGL.Map(mapRef.value); // 创建地图实例 
     const point = new BMapGL.Point(props.position.longitude, props.position.latitude); // 创建点坐标 
@@ -27,5 +29,7 @@ onMounted(() => {
 </script>
 
 <style lang="less" scoped>
-
+.baidu {
+  height: 250px;
+}
 </style>

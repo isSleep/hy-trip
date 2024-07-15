@@ -19,7 +19,7 @@
       <detail-landlord name="房东" :landlord="mainPart.dynamicModule.landlordModule" />
       <detail-comment name="评论" :comment="mainPart.dynamicModule.commentModule" />
       <detail-notice name="须知" :order-rules="mainPart.dynamicModule.rulesModule.orderRules" />
-      <!-- <detail-map name="周边" :position="mainPart.dynamicModule.positionModule" /> -->
+      <detail-map name="周边" :position="mainPart.dynamicModule.positionModule" />
       <detail-intro :price-intro="mainPart.introductionModule" />
     </div>
     <div class="footer">
@@ -41,7 +41,7 @@ import DetailFacility from "./cpns/detail_03-facility.vue"
 import DetailLandlord from "./cpns/detail_04-landlord.vue"
 import DetailComment from "./cpns/detail_05-comment.vue"
 import DetailNotice from "./cpns/detail_06-notice.vue"
-// import DetailMap from "./cpns/detail_07-map.vue"
+import DetailMap from "./cpns/detail_07-map.vue"
 import DetailIntro from "./cpns/detail_08-intro.vue"
 import useScroll from '@/hooks/useScroll'
 
