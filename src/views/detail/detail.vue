@@ -29,25 +29,16 @@
 -->
 <template>
   <div class="detail top-page" ref="detailRef">
-    <tab-control
-      v-if="showTabControl"
-      class="tabs"
-      :titles="names"
-      @tabItemClick="tabClick"
-    />
-    <van-nav-bar 
-      title="房屋详情" 
-      left-text="旅途" 
-      left-arrow 
-      @click-left="onClickLeft" 
-    />
+    <tab-control v-if="showTabControl" class="tabs" :titles="names" @tabItemClick="tabClick" ref="tabControlRef" />
+    <van-nav-bar title="房屋详情" left-text="旅途" left-arrow @click-left="onClickLeft" />
 
     <!-- 绑定v-memo="[mainPart]"实现只监听某个属性的变化 -->
     <div class="main" v-if="mainPart" v-memo="[mainPart]">
       <detail-swipe :swipe-data="mainPart.topModule.housePicture.housePics" />
       <detail-infos :ref="getSectionRef" name="描述" :top-infos="mainPart.topModule" />
-      <detail-facility :ref="getSectionRef" name="设施" :house-facility="mainPart.dynamicModule.facilityModule.houseFacility" />
-      <detail-landlord  :ref="getSectionRef" name="房东" :landlord="mainPart.dynamicModule.landlordModule" />
+      <detail-facility :ref="getSectionRef" name="设施"
+        :house-facility="mainPart.dynamicModule.facilityModule.houseFacility" />
+      <detail-landlord :ref="getSectionRef" name="房东" :landlord="mainPart.dynamicModule.landlordModule" />
       <detail-comment :ref="getSectionRef" name="评论" :comment="mainPart.dynamicModule.commentModule" />
       <detail-notice :ref="getSectionRef" name="须知" :order-rules="mainPart.dynamicModule.rulesModule.orderRules" />
       <detail-map :ref="getSectionRef" name="周边" :position="mainPart.dynamicModule.positionModule" />
@@ -61,7 +52,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
 import { getDetailInfos } from '@/services'
 
@@ -111,23 +102,53 @@ const names = computed(() => {
 })
 const getSectionRef = (value) => {
   // .$el获取根元素
-  if(!value) return
+  if (!value) return
   const name = value.$el.getAttribute("name")
   sectionEls.value[name] = value.$el
 }
+
+let isClick = false
+let currentDistance = -1
 const tabClick = (index) => {
   const key = Object.keys(sectionEls.value)[index]
   const el = sectionEls.value[key]
-  let instance = el.offsetTop
+  let distance = el.offsetTop
   if (index !== 0) {
-    instance = instance - 44
+    distance = distance - 44
   }
 
+  isClick = true
+  currentDistance = distance
+
   detailRef.value.scrollTo({
-    top: instance,
+    top: distance,
     behavior: "smooth"
   })
 }
+
+// 滚动时匹配对应的tabControll的index
+const tabControlRef = ref()
+watch(scrollTop, (newValue) => {
+  if (newValue === currentDistance) {
+    isClick = false
+  }
+  if (isClick) return
+
+  // 1.获取所有的区域的offsetTops
+  const els = Object.values(sectionEls.value)
+  const values = els.map(el => el.offsetTop)
+
+  // 2.根据newValue去匹配想要索引
+  let index = values.length - 1
+  for (let i = 0; i < values.length; i++) {
+    if (values[i] > newValue + 44) {
+      index = i - 1
+      break
+    }
+  }
+  // console.log(index)
+  tabControlRef.value?.setCurrentIndex(index)
+})
 </script>
 
 <style lang="less" scoped>
@@ -138,6 +159,7 @@ const tabClick = (index) => {
   right: 0;
   top: 0;
 }
+
 .footer {
   display: flex;
   flex-direction: column;
@@ -154,4 +176,5 @@ const tabClick = (index) => {
     font-size: 12px;
     color: #7688a7;
   }
-}</style>
+}
+</style>
