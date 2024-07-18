@@ -111,6 +111,7 @@ const names = computed(() => {
 })
 const getSectionRef = (value) => {
   // .$el获取根元素
+  if(!value) return
   const name = value.$el.getAttribute("name")
   sectionEls.value[name] = value.$el
 }
