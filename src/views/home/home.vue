@@ -14,6 +14,10 @@
   </div>
 </template>
 
+<script>
+  export default { name: "home" }
+</script>
+
 <script setup>
 import { ref, watch } from 'vue'
 import useHomeStore from '@/stores/modules/home';
